@@ -22,8 +22,6 @@ function AuthContextProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<AuthSession | null | undefined>(
     undefined
   );
-  const [checkedAsyncStorageForSession, setCheckedAsyncStorageForSession] =
-    useState<boolean>(false);
 
   useEffect(() => {
     /**
