@@ -19,6 +19,12 @@ type State = {
 export const AuthContext = createContext<State | undefined>(undefined);
 
 function AuthContextProvider({ children }: { children: ReactNode }) {
+  /**
+   * What the session state can tell us:
+   * - undefined: The session is being loaded.
+   * - null: The session is fetched and is unavailable.
+   * - AuthSession: There is a session.
+   */
   const [session, setSession] = useState<AuthSession | null | undefined>(
     undefined
   );
