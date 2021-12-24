@@ -13,9 +13,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -27,6 +25,13 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "scheme": "todo",
+    "extra": {
+      "supabase": {
+        "url": "https://lkpolpmewuvwxfvuvjeb.supabase.co",
+        "publicKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzOTMwNjQ2NSwiZXhwIjoxOTU0ODgyNDY1fQ.3oHP_eRIy4eZnms5zu_eTBZ_J-dLOTXj9I2hGLQtk-s"
+      }
     }
   }
 }
