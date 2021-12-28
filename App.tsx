@@ -10,7 +10,7 @@ import { AuthContextProvider, useAuthUser } from "./src/state/auth-context";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const AppNavigator = () => {
+function AppNavigator() {
   const user = useAuthUser();
 
   return (
@@ -21,18 +21,16 @@ const AppNavigator = () => {
         )}
         {user === null && <Stack.Screen name="Login" component={Login} />}
         {user && (
-          <>
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{ headerRight: LogoutButton }}
-            />
-          </>
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerRight: LogoutButton }}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
+}
 
 export default function App() {
   /**

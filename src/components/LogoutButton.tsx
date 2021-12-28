@@ -1,8 +1,7 @@
-import React from "react";
 import { Pressable, Text } from "react-native";
 import supabase from "../lib/supabase";
 
-const LogoutButton = () => {
+function LogoutButton() {
   return (
     <Pressable
       onPress={() => {
@@ -12,6 +11,6 @@ const LogoutButton = () => {
       <Text>Logout</Text>
     </Pressable>
   );
-};
+}
 
 export default LogoutButton;

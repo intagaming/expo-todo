@@ -1,5 +1,4 @@
 import * as AuthSession from "expo-auth-session";
-import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import supabase, { supabaseConfig } from "../../lib/supabase";
 

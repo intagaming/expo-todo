@@ -1,6 +1,6 @@
 import AsyncStorageLib from "@react-native-async-storage/async-storage";
 import { AuthSession } from "@supabase/supabase-js";
-import React, {
+import {
   createContext,
   ReactNode,
   useContext,
