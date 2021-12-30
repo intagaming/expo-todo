@@ -3,5 +3,5 @@ export type RootStackParamList = {
 
   Login: undefined;
 
-  Home: undefined;
+  Todo: undefined;
 };

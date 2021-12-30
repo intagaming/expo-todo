@@ -1,12 +1,14 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import allSettled from "promise.allsettled";
+import { QueryClient, QueryClientProvider } from "react-query";
 import LogoutButton from "./src/components/LogoutButton";
 import { RootStackParamList } from "./src/navigation/types";
 import Login from "./src/screens/auth/Login";
-import Home from "./src/screens/Home";
 import Loading from "./src/screens/auth/Loading";
 import { AuthContextProvider, useAuthUser } from "./src/state/auth-context";
+import Todo from "./src/screens/Todo";
+import "react-native-url-polyfill/auto";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,8 +24,8 @@ function AppNavigator() {
         {user === null && <Stack.Screen name="Login" component={Login} />}
         {user && (
           <Stack.Screen
-            name="Home"
-            component={Home}
+            name="Todo"
+            component={Todo}
             options={{ headerRight: LogoutButton }}
           />
         )}
@@ -31,6 +33,8 @@ function AppNavigator() {
     </NavigationContainer>
   );
 }
+
+const queryClient = new QueryClient();
 
 export default function App() {
   /**
@@ -41,8 +45,10 @@ export default function App() {
   allSettled.shim();
 
   return (
-    <AuthContextProvider>
-      <AppNavigator />
-    </AuthContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
+        <AppNavigator />
+      </AuthContextProvider>
+    </QueryClientProvider>
   );
 }
