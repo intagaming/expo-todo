@@ -1,12 +1,16 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import AddTodoItem from "../components/AddTodoItem";
 import TodoItem from "../components/TodoItem";
+import useTodoDelete from "../hooks/useTodoDelete";
 import useTodoMutation from "../hooks/useTodoMutation";
 import useTodosQuery from "../hooks/useTodosQuery";
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
+    flex: 1,
+  },
+  list: {
+    flex: 1,
   },
 });
 
@@ -17,6 +21,7 @@ function Todo() {
   const todos = data && data.pages.flatMap((page) => page.todos);
 
   const todoMutation = useTodoMutation();
+  const todoDelete = useTodoDelete();
 
   return (
     <View style={styles.container}>
@@ -26,13 +31,16 @@ function Todo() {
       {todos && (
         <>
           <FlatList
+            style={styles.list}
             data={todos}
             renderItem={({ item }) => (
               <TodoItem
+                key={item.id}
                 todo={item}
                 onChange={(newTodo) => {
                   todoMutation.mutate(newTodo);
                 }}
+                onDelete={() => todoDelete.mutate(item)}
               />
             )}
             onEndReached={() => {

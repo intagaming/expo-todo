@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-color-literals */
 import Checkbox from "expo-checkbox";
 import { useEffect, useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { definitions } from "../types/supabase";
 
 const styles = StyleSheet.create({
@@ -20,21 +20,23 @@ const styles = StyleSheet.create({
 
 interface Props {
   todo: definitions["todos"];
-  onChange: (newTodo: Partial<definitions["todos"]>) => void;
+  onChange?: (newTodo: Partial<definitions["todos"]>) => void;
+  onDelete?: () => void;
 }
 
-export default function TodoItem({ todo, onChange }: Props) {
-  const [checked, setChecked] = useState<boolean>(todo.is_complete ?? false);
+export default function TodoItem({ todo, onChange, onDelete }: Props) {
   const [task, setTask] = useState<string>(todo.task ?? "");
   const [taskBuffer, setTaskBuffer] = useState<string>(task);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (taskBuffer === task) return;
-      onChange({
-        id: todo.id,
-        task: taskBuffer,
-      });
+      if (onChange) {
+        onChange({
+          id: todo.id,
+          task: taskBuffer,
+        });
+      }
       setTask(taskBuffer);
     }, 500);
 
@@ -46,10 +48,11 @@ export default function TodoItem({ todo, onChange }: Props) {
   return (
     <View style={styles.container}>
       <Checkbox
-        value={checked}
+        value={todo.is_complete}
         onValueChange={(value) => {
-          onChange({ id: todo.id, is_complete: value });
-          setChecked(value);
+          if (onChange) {
+            onChange({ id: todo.id, is_complete: value });
+          }
         }}
       />
       <TextInput
@@ -60,6 +63,20 @@ export default function TodoItem({ todo, onChange }: Props) {
         }}
         multiline
       />
+      <Pressable
+        onPress={() => {
+          if (onDelete) {
+            onDelete();
+          }
+        }}
+      >
+        <Text>Delete</Text>
+      </Pressable>
     </View>
   );
 }
+
+TodoItem.defaultProps = {
+  onChange: undefined,
+  onDelete: undefined,
+};

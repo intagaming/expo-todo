@@ -1,4 +1,4 @@
-import { useInfiniteQuery, UseInfiniteQueryResult } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import supabase from "../lib/supabase";
 import { definitions } from "../types/supabase";
 
@@ -8,7 +8,7 @@ export const todosKey = {
 
 const TODOS_PER_PAGE = 10;
 
-type TodosPage = {
+export type TodosPage = {
   page: number;
   todos: definitions["todos"][];
 };
@@ -34,8 +34,8 @@ const getTodos = async ({ pageParam = 0 }): Promise<TodosPage> => {
   };
 };
 
-const useTodosQuery = (): UseInfiniteQueryResult<TodosPage, Error> =>
-  useInfiniteQuery(todosKey.all, getTodos, {
+const useTodosQuery = () =>
+  useInfiniteQuery<TodosPage, Error>(todosKey.all, getTodos, {
     getNextPageParam: (lastPage) =>
       lastPage.todos.length === 0 ? undefined : lastPage.page + 1,
   });
