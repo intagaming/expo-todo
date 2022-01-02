@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StatusBar } from "expo-status-bar";
 import allSettled from "promise.allsettled";
 import "react-native-url-polyfill/auto";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -48,6 +49,8 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
         <AppNavigator />
+        {/* eslint-disable-next-line react/style-prop-object */}
+        <StatusBar style="auto" />
       </AuthContextProvider>
     </QueryClientProvider>
   );
