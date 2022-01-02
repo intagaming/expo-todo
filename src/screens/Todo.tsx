@@ -1,4 +1,6 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useMemo } from "react";
+import { FlatList, StyleSheet, Text } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AddTodoItem from "../components/AddTodoItem";
 import TodoItem from "../components/TodoItem";
 import useTodoDelete from "../hooks/useTodoDelete";
@@ -18,13 +20,16 @@ function Todo() {
   const { data, error, isLoading, hasNextPage, fetchNextPage } =
     useTodosQuery();
 
-  const todos = data && data.pages.flatMap((page) => page.todos);
+  const todos = useMemo(
+    () => data && data.pages.flatMap((page) => page.todos),
+    [data]
+  );
 
   const todoMutation = useTodoMutation();
   const todoDelete = useTodoDelete();
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       {isLoading && <Text>Please wait...</Text>}
       {error && <Text>{error.message}</Text>}
       {todos && todos.length === 0 && <Text>List is empty.</Text>}
@@ -56,7 +61,7 @@ function Todo() {
           />
         </>
       )}
-    </View>
+    </GestureHandlerRootView>
   );
 }
 

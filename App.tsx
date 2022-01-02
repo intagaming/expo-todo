@@ -1,14 +1,14 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import allSettled from "promise.allsettled";
+import "react-native-url-polyfill/auto";
 import { QueryClient, QueryClientProvider } from "react-query";
 import LogoutButton from "./src/components/LogoutButton";
 import { RootStackParamList } from "./src/navigation/types";
-import Login from "./src/screens/auth/Login";
 import Loading from "./src/screens/auth/Loading";
-import { AuthContextProvider, useAuthUser } from "./src/state/auth-context";
+import Login from "./src/screens/auth/Login";
 import Todo from "./src/screens/Todo";
-import "react-native-url-polyfill/auto";
+import { AuthContextProvider, useAuthUser } from "./src/state/auth-context";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
