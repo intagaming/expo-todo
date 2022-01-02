@@ -1,21 +1,11 @@
 /* eslint-disable react-native/no-color-literals */
 import { AntDesign } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, {
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
+import { RectButton, Swipeable } from "react-native-gesture-handler";
+import Animated from "react-native-reanimated";
 import { definitions } from "../types/supabase";
-
-const THRESHOLDS = {
-  activate: -100,
-  pending: -80,
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -29,15 +19,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: "100%",
     justifyContent: "flex-end",
-    position: "absolute",
-    right: 0,
     width: "100%",
   },
-  deleteIconContainer: {
-    alignItems: "center",
-    height: "100%",
-    justifyContent: "center",
-    width: Math.abs(THRESHOLDS.pending),
+  deleteIcon: {
+    marginRight: 30,
   },
   taskItem: {
     alignItems: "center",
@@ -49,7 +34,7 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    marginLeft: 10,
+    marginHorizontal: 10,
   },
 });
 
@@ -81,35 +66,25 @@ export default function TodoItem({ todo, onChange, onDelete }: Props) {
     };
   }, [taskBuffer]);
 
-  const offsetX = useSharedValue(0);
-  const animatedStyles = useAnimatedStyle(() => ({
-    transform: [{ translateX: offsetX.value }],
-  }));
-
-  const startX = useSharedValue(0);
-  const gesture = Gesture.Pan()
-    .onUpdate((e) => {
-      offsetX.value = e.translationX + startX.value;
-    })
-    .onEnd(() => {
-      if (offsetX.value < THRESHOLDS.activate) {
-        if (onDelete) runOnJS(onDelete)();
-      } else if (offsetX.value < THRESHOLDS.pending) {
-        offsetX.value = withSpring(THRESHOLDS.pending);
-        startX.value = THRESHOLDS.pending;
-      } else {
-        offsetX.value = withSpring(0);
-        startX.value = 0;
-      }
-    })
-    .activeOffsetX([-20, 20]);
-
-  const inputRef = useRef<TextInput | null>(null);
-
   return (
-    <View style={styles.container}>
-      <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.taskItem, animatedStyles]}>
+    <Swipeable
+      renderRightActions={() => (
+        <RectButton style={styles.delete}>
+          <AntDesign
+            style={styles.deleteIcon}
+            name="delete"
+            size={24}
+            color="white"
+          />
+        </RectButton>
+      )}
+      rightThreshold={41}
+      onSwipeableRightOpen={() => {
+        if (onDelete) onDelete();
+      }}
+    >
+      <View style={styles.container}>
+        <Animated.View style={styles.taskItem}>
           <Checkbox
             value={todo.is_complete}
             onValueChange={(value) => {
@@ -130,7 +105,6 @@ export default function TodoItem({ todo, onChange, onDelete }: Props) {
           )}
           {editing && (
             <TextInput
-              ref={inputRef}
               style={styles.text}
               value={taskBuffer}
               onChangeText={(text) => {
@@ -144,13 +118,8 @@ export default function TodoItem({ todo, onChange, onDelete }: Props) {
             />
           )}
         </Animated.View>
-      </GestureDetector>
-      <View style={styles.delete}>
-        <View style={styles.deleteIconContainer}>
-          <AntDesign name="delete" size={24} color="white" />
-        </View>
       </View>
-    </View>
+    </Swipeable>
   );
 }
 
